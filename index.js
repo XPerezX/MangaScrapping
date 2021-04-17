@@ -2,12 +2,12 @@ const puppeteer = require("puppeteer");
 const fs = require('fs');
 
 (async () => {
-    const browser = await puppeteer.launch({ headless: false});
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto("https://mangalivre.net/ler/mashle/online/293786/capitulo-58");
+    await page.goto("https://mangalivre.net/ler/solo-leveling/online/294603/capitulo-147");
     
     //await page.click('div.page-next');
-    const getPages = await page.evaluate(() => {
+    const getHtmlPages = await page.evaluate(() => {
 
     const MangaCap = [];
 
@@ -25,16 +25,17 @@ const fs = require('fs');
         document.querySelector(".manga-image img").src); */
 
         for(let count = firstPage; count < lastPage; count++) {
-            MangaCap.push(document.querySelector(".manga-image img").src);
+            MangaCap.push(`<img src="${document.querySelector(".manga-image img").src}">`);
             ElementToNextPage.click();
         }
         
-        console.log(MangaCap);
+        const MangaImageTags = MangaCap.join("");
+        const test_html = `<html>${MangaImageTags}</html>`;
         //const test_html = `<html><img src="https://i0.wp.com/static2cdn.mangalivre.com/firefox/-J1phfjdriPti3UgyAGr7Q/m6824745/9189/280576/293786/003.png"></html>`;
-        return MangaCap;
+        return test_html;
     });
 
-    //await page.pdf({ path: "manga.pdf", format: "a4" });
-  
-   //await browser.close();
+    await page.goto(`data:text/html,${getHtmlPages}`, { waitUntil: 'networkidle0' });
+    await page.pdf({ path: "manga.pdf", format: "a4" });
+    await browser.close();
   })();
