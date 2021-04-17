@@ -14,9 +14,18 @@ const puppeteer = require("puppeteer");
     
         const firstPage = parseInt(initialandLastPages[0]);
         
-        console.log(initialandLastPages);
+        const lastPage = parseInt(initialandLastPages[1]);
 
-        const list = [...document.querySelectorAll(".manga-image img")].map(({src}) => MangaCap.push(src) );
+        /* console.log(firstPage, lastPage);
+
+        console.log("imga", 
+        document.querySelector(".manga-image img").src); */
+
+        for(let count = firstPage; count < lastPage; count++) {
+            MangaCap.push(document.querySelector(".manga-image img").src);
+        }
+ 
+        // const list = [...document.querySelectorAll(".manga-image img")].map(({src}) => MangaCap.push(src) );
         console.log(MangaCap);
     });
     //await page.pdf({path: 'manga.pdf'});
